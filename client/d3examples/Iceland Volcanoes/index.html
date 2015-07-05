@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html lang="en">
+	<head>
+		<meta charset="utf-8">
+		<title>D3</title>
+		<script type="text/javascript" src="d3.v3.js"></script>
+	</head>
+	<body>
+		<script type="text/javascript">
+
+			var w = 500;
+			var h = 300;
+
+			var xScale;  //make this a global variable
+
+
+			//Load the data in
+			d3.csv("us-cities.csv", function(dataset) {
+
+				console.log(dataset);
+
+				//Set up scale
+				xScale = d3.scale.linear()
+							.domain([
+								0, //low value
+								//high value
+								d3.max(dataset, function(d) {
+									return +d.population;
+								})
+							])
+							.range([0, w]);
+
+				//Then draw my chart
+
+				//Create the SVG
+				var svg = d3.select("body")
+							.append("svg")
+							.attr("width", w)
+							.attr("height", h);
+
+				//Make some rectangles
+				svg.selectAll("rect")
+					.data(dataset)
+					.enter()
+					.append("rect")
+					.attr("x", 0)
+					.attr("y", function(d, i) {
+						return i * 11;
+					})
+					.attr("width", function(d) {
+						return xScale(d.population);
+					})
+					.attr("height", 10)
+					.attr("fill", "steelblue");
+
+
+
+
+
+			});
+
+
+
+		</script>
+	</body>
+</html>
