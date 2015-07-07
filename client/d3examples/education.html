@@ -1,0 +1,73 @@
+<html>
+
+<head>
+    <script src="http://d3js.org/d3.v3.min.js"></script>
+</head>
+
+<body>
+    <svg></svg>
+</body>
+
+<script>
+    var array = [1, 2, 3, 4, 5, 6];
+
+    var width = 800,
+        height = 300,
+        padding = 20;
+
+    var scaleX = d3.scale.linear()
+        .domain([0, 10])
+        .range([padding, width-padding]);
+
+    var scaleY = d3.scale.linear()
+        .domain([0, 10])
+        .range([padding, height - padding]);
+
+    var xAxis = d3.svg.axis()
+		.scale(scaleX)
+		.orient("bottom")
+		.ticks(5);
+
+    function draw() {
+        var svg = d3.selectAll('svg')
+            .attr('width', width)
+            .attr('height', height);
+
+        /*svg.append("g")
+            .attr("class", "axis")
+            .call(xAxis)
+            .attr("transform", "translate(" + padding + ", " + (height - padding) + ")")*/
+
+        // update
+        var circles = svg.selectAll('circle')
+            .data(array);
+
+        circles
+            .transition().duration(2000)
+            .style('fill', 'red')
+            .attr('cx', function(d) {
+                return scaleX(d);
+            }).attr('cy', function(d) {
+                return scaleY(d);
+            });
+
+        // enter
+        circles.enter().append('circle')
+            .attr('cx', 0).attr('cy', 0)
+            .attr('r', 0)
+            .transition().duration(2000)
+            .attr('cx', function(d) {
+                return scaleX(d);
+            }).attr('cy', function(d) {
+                return scaleY(d);
+            }).attr('r', '5');
+
+        // exit
+        circles.exit().transition().duration(2000).style('opacity', 0).remove();//.transition()
+    }
+
+    draw();
+</script>
+
+</html>
+

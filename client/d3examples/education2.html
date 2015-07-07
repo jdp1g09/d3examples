@@ -1,0 +1,39 @@
+<html>
+
+<head>
+    <script src="http://d3js.org/d3.v3.min.js"></script>
+</head>
+
+<body>
+    <svg></svg>
+</body>
+
+<script>
+    var array = [1, 2, 3, 4, 5];
+
+    var width = 600, height = 600, padding = 20;
+
+    var scaleX = d3.scale.linear()
+        .domain([0, 10])
+        .range([padding, width-padding]);
+
+    var scaleY = d3.scale.linear()
+        .domain([0, 10])
+        .range([padding, height - padding]);
+
+    var svg = d3.select('svg')
+        .attr('width', width).attr('height', height);
+
+    svg.selectAll('circle')
+        .data(array)
+        .enter().append('circle')
+        .attr('cx', function(d, i) {
+            return scaleX(d);
+        })
+        .attr('cy', function(d, i) {
+            return scaleY(d);
+        })
+        .style('r', 5);
+</script>
+
+</html>
