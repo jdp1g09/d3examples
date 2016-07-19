@@ -1,0 +1,93 @@
+<html>
+
+<head>
+	<script src="https://d3js.org/d3.v4.min.js"></script>
+</head>
+
+<body>
+	<div id="ebdiv" class="ebclass">
+		Hello, this is some code
+	</div>
+
+	<div class="ebclass">
+		Hello, this is some code
+	</div>
+
+	<div id="myparagraphs"></div>
+
+	<svg id="myCanvas"></svg>
+
+	<script type="text/javascript">
+		d3.selectAll('.ebclass').style('color', 'red');
+
+		d3.selectAll('#ebdiv').style('font-size', '14pt').style('opacity', function () {
+			return Math.random();
+		});
+
+		var myArray = [{
+			x: 30,
+			y: 80,
+			r: 5
+			}, {
+			x: 30,
+			y: 10,
+			r: 10
+			}];
+
+		var myp = d3.selectAll('#myparagraphs');
+
+		myp.selectAll('p').data(myArray).enter().append('p').text(function (d, i) {
+			return d * i;
+		}).style('color', 'blue');
+
+		myArray.push({
+			x: 70,
+			y: 20,
+			r: 5
+		});
+
+		myp.selectAll('p').data(myArray).enter().append('p').text(function (d) {
+			return d;
+		}).transition().duration(2000).style('color', 'red');
+
+		// enter, exit, update
+
+		var mySvg;
+
+
+		function create() {
+			mySvg = d3.selectAll('#myCanvas');
+			mySvg.attr('width', 300).attr('height', 300).style('background-color', 'green');
+		}
+
+
+		function update(data) {
+			var circles = mySvg.selectAll('circle').data(data);
+
+			// new data
+			circles.enter().append('circle')
+				.attr('cx', '50%').attr('cy', '50%').attr('r', 100)
+				.transition().duration(2000).attr('cx', function (d, i) {
+					return d.x + '%';
+				}).attr('cy', function (d, i) {
+					return d.y + '%';
+				}).attr('r', function (d, i) {
+					return d.r;
+				});
+			
+			// update
+			circles.transition().duration(2000).delay(2000).style('fill', 'yellow');
+			
+			// removed data
+			circles.exit().transition().duration(3000).delay(2000).style('opacity', 0);
+
+		}
+
+		create();
+		update(myArray);
+		myArray.pop();
+		update(myArray);
+	</script>
+</body>
+
+</html>
